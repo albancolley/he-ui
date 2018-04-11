@@ -1,19 +1,16 @@
 import React from 'react';
 import Photo from "./Photo";
-import PropTypes from 'prop-types';
+import { Card } from 'semantic-ui-react'
 
 class Photos extends  React.Component {
-  constructor(props) {
-   super(props);
- }
 
  render() {
   const photos = this.props.photos.map((photo, i) => <Photo photo={photo} key={i} />);
 
   return (
-    <div>
+    <Card.Group itemsPerRow={4}>
       {photos}
-    </div>
+    </Card.Group>
     )
   }
 

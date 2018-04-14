@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Image, Popup } from "semantic-ui-react";
+import { Card, Image, Popup, Label } from "semantic-ui-react";
 //import Base58 from "base58";
 
 class Photo extends React.Component {
@@ -50,6 +50,9 @@ class Photo extends React.Component {
     let author = this.props.photo.author;
     let shortauthor = this.trimValue(author,10);
 
+    let tags = this.props.photo.tags.trim().split(' ').map(function (tag, index) {
+          return <Label size="mini" as="a" key={index}>{ tag }</Label>;
+      });
 
     return (
       <Card>
@@ -61,10 +64,10 @@ class Photo extends React.Component {
             {" "}by{" "}
             {this.popup(author, shortauthor,"https://www.flickr.com/people/47362452@N02" + this.props.photo.author_id)}
           </Card.Header>
-          <Card.Description dangerouslySetInnerHTML={{__html:this.getDescription(this.props.photo.description)}}/>
+          <Card.Description style={{overflow: 'auto', height: 100 }} dangerouslySetInnerHTML={{__html:this.getDescription(this.props.photo.description)}}/>
         </Card.Content>
-         <Card.Content extra>
-           <a>Tags: {this.props.photo.tags}</a>
+         <Card.Content extra style={{overflow: 'auto', height: 50 }}>
+           Tags: {tags}
          </Card.Content>
       </Card>
     );

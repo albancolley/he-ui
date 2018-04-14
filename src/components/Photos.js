@@ -8,7 +8,7 @@ class Photos extends  React.Component {
   const photos = this.props.photos.map((photo, i) => <Photo photo={photo} key={i} />);
 
   return (
-    <Card.Group itemsPerRow={4}>
+    <Card.Group itemsPerRow={4} stackable>
       {photos}
     </Card.Group>
     )

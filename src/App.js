@@ -1,5 +1,6 @@
 import React from "react";
 import Photos from "./components/Photos";
+import { Menu, Icon} from 'semantic-ui-react'
 
 import "./App.css";
 
@@ -18,32 +19,45 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    //let url = "https://api.flickr.com/services/rest/?api_key=250b611d0c93479aacfefce5b72d1ab5&method=flickr.photos.getRecent&format=json&per_page=10&page=1&extras=description,tags,url_q,owner_name&nojsoncallback=1";
-    let url = "https://api.flickr.com/services/feeds/photos_public.gne?format=json";
-    fetchJsonp(url, {
-      jsonpCallback: 'jsoncallback',
-      timeout: 3000
-      })
-      .then(res => res.json())
-      .then(
-        result => {
-          this.setState({
-            isLoaded: true,
-            photos: result.items
-          });
-        },
-        // Note: it's important to handle errors here
-        // instead of a catch() block so that we don't swallow
-        // exceptions from actual bugs in components.
-        error => {
-          console.log(error);
-          this.setState({
-            isLoaded: true,
-            error
-          });
-        }
-      );
+      this.getPhotos();
   }
+
+    getPhotos() {
+//let url = "https://api.flickr.com/services/rest/?api_key=250b611d0c93479aacfefce5b72d1ab5&method=flickr.photos.getRecent&format=json&per_page=10&page=1&extras=description,tags,url_q,owner_name&nojsoncallback=1";
+        let url = "https://api.flickr.com/services/feeds/photos_public.gne?format=json";
+        fetchJsonp(url, {
+            jsonpCallback: 'jsoncallback',
+            timeout: 3000
+        })
+            .then(res => res.json())
+            .then(
+                result => {
+                    this.setState({
+                        isLoaded: true,
+                        photos: result.items
+                    });
+                },
+                // Note: it's important to handle errors here
+                // instead of a catch() block so that we don't swallow
+                // exceptions from actual bugs in components.
+                error => {
+                    console.log(error);
+                    this.setState({
+                        isLoaded: true,
+                        error
+                    });
+                }
+            );
+    }
+
+    refresh = () => {
+        this.setState(prevState => ({
+            photos: [],
+            isLoaded: false
+
+        }));
+        this.getPhotos();
+    }
 
   render() {
     const { error, isLoaded, photos } = this.state;
@@ -53,7 +67,16 @@ class App extends React.Component {
       return <div>Loading...</div>;
     } else {
       return (
-        <div className="App">
+          <div className="App">
+            <Menu inverted>
+                <Menu.Item header>HX UI</Menu.Item>
+                <Menu.Menu position='right'>
+                    <Menu.Item>
+                        <Icon name='refresh' onClick={this.refresh }/>
+                    </Menu.Item>
+                </Menu.Menu>
+            </Menu>
+
           <Photos photos={photos}/>
         </div>
       );
